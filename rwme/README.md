@@ -11,7 +11,17 @@ Another important thing about React is that it’s a Single Page Application (SP
 Poperties are passed to component as atribute and can be used later in the child component.
 props can't be changed.
 # React States
-which makes dynamic rendering of a component , function component uses hooks to achieve it where calss component achieve the same by getting properties from parent component of React
+which makes dynamic rendering of a component , function component uses hooks to achieve it where calss component achieve the same by getting properties from parent component of React.
+<br>
+Component state update may be Asynchronous, so best practice is to use function rather direct updating the state.
+`Statefull components`<br>
+- mostly called class components
+- it has own state, life cycle management [componetDidMount(), componentDidUpdate(), componentWillUnmount(), componentDidCatch()]
+-  Best for Complex UI for tracking changes.
+`Stateless Components` <br>
+- mostly referred as functional componets
+- these components don't have own state and to track the changes in component hooks are used.
+- Best for simple UI and using functional components with hooks for complex UI. 
 # Key points
 React makes it easier to create UI components and re-use them
 
