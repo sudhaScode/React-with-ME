@@ -1,0 +1,27 @@
+.container{
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 800;
+    margin-left: 10vw;
+}
+.basic-info{
+  display: flex;
+  flex-direction: column;
+
+}
+.basic-info label{
+    font-weight: 500;
+    padding: 4px;
+}
+.where-container{
+    display: flex;
+    flex-direction: column;
+}
+.submit-button{
+    margin:10px 0;
+    border-radius: 3px;
+    border: 2pxs solid black;
+    margin-left: 40%;
+}
+.submit-button:hover{
+    background-color: aquamarine;
+}

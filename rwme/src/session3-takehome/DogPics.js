@@ -1,64 +1,75 @@
-import React, { useEffect, useState}  from "react";
-import fetchDogs from "./Utills";
-import Dog from "./Dog";
-import styles from './DogPics.module.css'
+import React from "react";
+import styles from './DogPics.module.css';
+import axios from "axios";
+import Dog from "./Dog.js";
 
-
-
-function DogPics() {
-  
-   const [breed, setBreed] = useState("random");
-   const [image, setImage] = useState("");
-
-   const onHandler = (event)=>{
-    const breed = event.target.value;
-     setBreed(breed);
-   }
-   const onClickHandler=()=>{
-    console.log("clicked")
-    fetchAPI(breed);
-   }
-
-   const fetchAPI = async(breed)=>{
-   // console.log(breed, "DEBUG")
-    let URL = "https://dog.ceo/api/breeds/image/random"
-    
-    if(breed !== "random"){
-        URL = `https://dog.ceo/api/breed/${breed}/images/random`
+class DogPics extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            breed: "random",
+            image: ""
+        }
+        this.onClickHandler = this.onClickHandler.bind(this)
     }
-    try{
-    const response = await fetchDogs(URL);
-    const data = response.data
-    if(response.status === 200){
-        //console.log(data.message, "message DEBUG")
-        setImage(data.message);
+    onHandler = (event) => {
+        this.setState((prevState, prevProps) => ({ breed: event.target.value }), async () => {
+            let URL = "https://dog.ceo/api/breed/husky/images/random"
+            if (this.state.breed !== "random") {
+                URL = `https://dog.ceo/api/breed/${this.state.breed}/images/random`
+            }
+            const data = await this.onFetchDog(URL);
+            this.setState(() => ({ image: data.message }))
+            console.log(data)
+        })
+        // console.log(this.state.breed)
     }
-    else{
-        console.error("API Failure")
-    }        
-    }catch(error){
-        console.log(error);
+    async onClickHandler() {
+        let URL = "https://dog.ceo/api/breed/husky/images/random"
+        if (this.state.breed !== "random") {
+            URL = `https://dog.ceo/api/breed/${this.state.breed}/images/random`
+        }
+        const data = await this.onFetchDog(URL);
+        this.setState(() => ({ image: data.message }))
+
     }
-}
-  useEffect(()=>{
-    fetchAPI(breed);
-  },[breed])
-  return (
-    <div className={styles['dog-pics']}>
-        <div className={styles.dropdown}>
-            <label htmlFor="dog-breed">Select a breed:</label>
-            <select id = "dog-breed" name="dog-breed" onChange={onHandler}>
-                <option value="random" >Random</option>
-                <option value="beagle">Beagle</option>
-                <option  value="boxer">Boxer</option>
-                <option value="dalmatian">Dalmatian</option>
-                <option value="husky">Husky</option>
-            </select>
-        </div>
-        <Dog name={breed} image = {image}/>
-        <button onClick={onClickHandler}>Next</button>
-    </div>
-  ); 
+    onFetchDog = async (URL) => {
+        const response = await axios.get(URL);
+        return await response.data
+
+    }
+    async componentDidMount() {
+        let URL = "https://dog.ceo/api/breed/husky/images/random"
+        const data = await this.onFetchDog(URL);
+        this.setState(() => ({ image: data.message }))
+        //console.log(this.state.image)
+    }
+
+
+    render() {
+        return (
+            <div className={styles.container}>
+                <div className={styles['dog-pics']}>
+                    <div className={styles.dropdown}>
+                        <label htmlFor="dog-breed">Select a breed:</label>
+                        <select id="dog-breed" name="dog-breed" onChange={this.onHandler}>
+                            <option value="random" >Random</option>
+                            <option value="beagle">Beagle</option>
+                            <option value="boxer">Boxer</option>
+                            <option value="dalmatian">Dalmatian</option>
+                            <option value="husky">Husky</option>
+                        </select>
+                    </div>
+                    <img src={this.state.image} alt={this.state.breed} />
+                    <button onClick={this.onClickHandler}>Next</button>
+                </div>
+            </div>
+
+        );
+
+    }
+
+
 }
 
 export default DogPics;

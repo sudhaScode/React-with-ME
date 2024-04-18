@@ -16,7 +16,7 @@ which makes dynamic rendering of a component , function component uses hooks to 
 Component state update may be Asynchronous, so best practice is to use function rather direct updating the state.
 `Statefull components`<br>
 - mostly called class components
-- it has own state, life cycle management [componetDidMount(), componentDidUpdate(), componentWillUnmount(), componentDidCatch()]
+- it has own state, life cycle management [constuctor, render(), componetDidMount(), componentDidUpdate(), componentWillUnmount(), componentDidCatch()]
 -  Best for Complex UI for tracking changes.
 `Stateless Components` <br>
 - mostly referred as functional componets
@@ -51,10 +51,6 @@ Handling events  with React elements is very similar to handling events on DOM e
 3. Define a function and invoke it as prop by callback function
    - onClick={() => this.handleClick()}
 
-## Function Based Components
-1. Define a event listener  and pass it to eh event tag as prop
-
-- Remember pass the function to thje event handler not invocation
 
 # Introduction Axios
 Axio is a very powerfull JS library to perfrom HTTP requests.
@@ -87,4 +83,25 @@ axios.post('https://site.com/', {<br>
 - axios.put()
 - axios.patch()
 - axios.options()
-    
+
+## Function Based Components
+1. Define a event listener  and pass it to eh event tag as prop
+
+- Remember pass the function to thje event handler not invocation
+<br>
+As in class based components `componetWillUnmount()` function is used to cleanup any resources created by the component, in function useEffect with return hook is used to cleanup the resouces when component  gets removed
+
+## Hooks
+Hooks are functions used to work with React API like React.DOM, React.render
+Hooks let you use state and other React features(rendering  lifecycle methods, fetching data, and more) in functional components without writing a class.
+1. useState()
+- useState is function which returns the array with `state` and `setState`. offered by `React` to manage state in functional components.
+- updates the state asynchronously so state is  not used immidiately after updating.
+- the new state is available only after the component next rerender, use the second arguments as callback function to the setState function
+2. useEffect()
+- used for component update acording to the lifecycle of component.
+3. useContext()
+4. useReducer()
+5. useMemo()
+6. useRef()
+7. useCallback()

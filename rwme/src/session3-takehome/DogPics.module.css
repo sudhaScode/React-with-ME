@@ -4,8 +4,17 @@
 .dropdown{
     padding-bottom: 10px;
 }
-.image img{
+.container img{
     border-radius:5px;
     height: 300px;
     width: 300px;
+}
+.container button{
+    margin-top: 10px;
+    width: 50px;
+
+}
+.container{
+    display: flex;
+    flex-direction: column;
 }
