@@ -82,6 +82,7 @@ function Form(props){
         </div>
         <button type="submit" className="submit-button" id ="submitButton" disabled>Confirm Booking</button>
         </form>
+
     </div>
 
     );

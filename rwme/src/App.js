@@ -1,11 +1,13 @@
 
 import './App.css';
 import LifeCyle from './session4-activity/LifeCycle';
+import NetworkStatus from './CheckNetworkStatus/NetworkStatus';
 
 function App() {
   return (
     <div className="App">
-      <LifeCyle diff={10}/>
+     { false && <LifeCyle diff={10}/>}
+     {true && <NetworkStatus/>}
     </div>
   );
 }

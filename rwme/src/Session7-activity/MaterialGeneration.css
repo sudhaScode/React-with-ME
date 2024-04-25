@@ -1,0 +1,21 @@
+.form-container{
+    display: flex;
+    flex-direction: column;
+    margin: 30px;
+ 
+ }
+@media screen and (min-width: 568px){
+    .form-container{
+        display: flex;
+        flex-direction: row;
+        margin: 30px;
+     
+     }
+}
+
+.grid-container {
+    margin-top: 20px;
+    border: 1px solid #ccc; /* Add a border for visibility */
+  }
+  
+
