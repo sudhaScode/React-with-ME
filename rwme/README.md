@@ -234,16 +234,15 @@ Navigate and useNavigate:
 - useNavigate()
   - const navigate = useNavigate();
     - navigate('/new-route');
+- useHistory() (depreceated with useNavigate)
   - const history = useHistory();
     - history.push('/new-route');
-
-- useHistory()
 ### Navigation with React Router DOM library
 - Link
   - Link to="/new-route">Go to New Route /Link>
 - NavLink
   - NavLink to="/new-route">Go to New Route /NavLink>
-- Navigate
+- Navigate replaced for Redirect(v5)
   - Navigate to="/login" replace /> 
 ## Get started with Notistack
   https://notistack.com/getting-started
@@ -277,6 +276,88 @@ Box component is used as a wrapper component in Material-UI react. You can inclu
 ## Progress
 Progress indicators commonly known as spinners, express an unspecified wait time or display the length of a process.
 
+Here the points to checkout for grid and card components. And Styling material UI components using styles library- -makeStyles  
 
+# Handling of Asynchrnous operations in Java Script
+Problem Statement: Java Script is single threaded, when dealing with operations like fecthing data, sending sata to server the main thread of project gets freezes until the long running get executes. In order to make the main thread to continue running while long running tasks get executing. to achieve this JS offers well defined techniques.
+<br>
+Java Script offers a fundametal aproach of Promises to handle the Aysnchronous operations. And ES6 version of JS introduced another two advanced techniques to deal with async operation.
 
+# Debounce
+Debounce is technique to reduce the unnecessary event calls/fetchng call which usally makes the component to rerender on browser (rerender can decrease the performance by repainting), reduceing utilization of  runtime resources.<br>
+the debounce technique helps prevent excessive API calls or computations on every keystroke<br>
+Debouncing is a technique that delays the execution of a function until a certain amount of time has passed since the last time it was triggered. This is often used to improve performance and prevent excessive function calls, especially for user input events like typing.
+<br>
+this logic is achieved by keeping some delay to act for a event.
+- it returns a closure function with setTimeout operation <br>
+A debounce is a cousin of the throttle, and they both improve the performance of web applications. However, they are used in different cases. A debounce is utilized when you only care about the final state. For example, waiting until a user stops typing to fetch typeahead search results. A throttle is best used when you want to handle all intermediate states but at a controlled rate. For example, track the screen width as a user resizes the window and rearrange page content while it changes instead of waiting until the user has finished.
 
+# Notification
+## toast library by react
+- import { toast } from "react-toastify";
+## notistack
+https://notistack.com/getting-started
+React library for notification 
+
+# context API
+1. Purpose and Benefits:
+
+- Sharing Data: Context API allows you to share data between components without prop drilling, which can become cumbersome in deeply nested component hierarchies.
+- Global State: It provides a way to manage global state within a specific part of your application, making it easier to access and update shared data.
+- Improved Code Structure: By avoiding prop drilling, your code becomes cleaner, more maintainable, and easier to reason about.
+2. Key Concepts:
+- createContext(): This function creates a context object that holds the shared data and provides access methods.
+- Provider: A component that wraps other components and provides the context value to its descendants.
+- useContext() Hook: Used within components to access the context value provided by a parent Provider.
+
+# Redux
+- Redux is predictable state container for javaScript apps
+<strong>Problem statement: <strong> when a state of a component is need to share to ancestor components it can be done by prop lifting/props drilling this approach causes rerendering of components in the prop flow. to mitigate the prop lifting Redux helps developing a global state management for an application.
+
+**Resposibilities**
+- Holds application state `store = createStore(reducer)`
+- Allows access to state via `store.getState() or useSelector()`
+- Allows state to be updated via `store.dispatch(actiontype)`
+- Register listners via `store.subscribe(listener)` returns unsubscribe() function
+React Context also provides GSM but suitable for simple applications
+
+- global state management
+- flux architecture
+ - `State` -{}
+   - A store that holds the state of your application.
+
+ - `Action` - () - triggers the reducer function
+   - An action  that decribes the changes in the state of the application
+   - intract with the store
+   - Plain javaScript objects
+   - Have a type property that indicates the type of action being performed
+   - Action types (which are constants through out the store) and action creators (which are fucntions returns the object with action type and data(optional))
+ - `Reducer` - (state, action) -updater with bussiness logic - to define actual state
+   - A Reducer which actually carries out the state transition depending an action -ties the store and actions together
+   - incharge to the store - a pure function
+   - accepts the statte and action, returns the new state based on the action type
+- Sychronous in nature, can't be merge any asynchronous operations
+- connect is used to establish a connection to store to manage state.
+Create store with reducers using redux toolkit <br>
+const store = configureStore({
+  reducer: {counter: counterSlice.reducer, auth:authSlice.reducer},<br>
+  // Other store configuration options if needed
+});<br>
+export const quanityActions = quantitySlice.actions;
+export const cartActions = mainCartSlice.actions;
+export default store;
+
+### React-Redux library is used to bind the react application to redux store
+- it provides the Provider component
+Wrap the react parent components with Provider and store as prop
+  <Provider store ={store}><br>
+    <App />
+  </Provider><br>
+below hooks are used to bind:
+ - useDispatch()  used to call update action - returns the dispath function 
+ - useSelector() used to retreive the data from state - returns the state 
+
+ ### Async Actions in Redux
+ States are updated sychronosly to the store, So Redux won't encourage the asynchronous operations inside it components.
+ - redux-thunk
+ - applyMiddleware()
