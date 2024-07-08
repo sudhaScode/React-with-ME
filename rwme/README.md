@@ -1,3 +1,111 @@
+`The JavaScript execution lifecycle refers to the process by which JavaScript code is interpreted and executed by the JavaScript engine. It involves several key stages:`
+<br>
+
+1. `Parsing:`<br>
+
+The JavaScript engine starts by parsing the code. This involves breaking down the code into smaller units called tokens (keywords, identifiers, operators, etc.). The engine creates an Abstract Syntax Tree (AST), which is a hierarchical representation of the code's structure.<br>
+2. `Code Generation (Optional):`<br>
+
+In some cases, the engine might perform an optional step called code generation. This involves translating the AST into machine code (or bytecode) that can be executed more efficiently by the computer.<br>
+3. `Scoping:`<br>
+
+The engine determines the scope of variables and functions within the code. Scoping defines where variables are accessible and how they are resolved. JavaScript has both global scope (accessible throughout the program) and function scope (accessible only within a specific function).<br>
+4. `Variable and Function Hoisting:`<br>
+
+JavaScript has a unique behavior called hoisting. Variable declarations (but not assignments) and function declarations are hoisted to the top of their scope. This means you can reference variables or functions before they are declared in the code. However, this can lead to unexpected behavior if not used carefully.<br>
+5. `Memory Allocation:`<br>
+
+The engine allocates memory for variables and functions. The type of a variable (e.g., number, string) determines the amount and type of memory allocated.<br>
+6. `Execution:`<br>
+
+The engine starts executing the code line by line. It evaluates expressions, calls functions, and performs operations based on the code's instructions.<br>
+7. `Call Stack Management:`<br>
+
+When a function is called, its execution context is pushed onto a call stack. This context includes the function's arguments, local variables, and the current state of the program. When the function finishes execution, its context is popped from the call stack.<br>
+8. `Event Loop:`<br>
+
+JavaScript is single-threaded, meaning it can only execute one task at a time. The event loop is a mechanism that allows JavaScript to handle asynchronous operations (e.g., network requests, user interactions). When an asynchronous operation is triggered, the event loop queues it for execution later. When the current task finishes (i.e., the call stack is empty), the event loop checks the queue and executes the next asynchronous task.<br>
+9. `Garbage Collection:`<br>
+
+JavaScript performs garbage collection automatically. When a variable or object is no longer referenced and cannot be reached by the code, the garbage collector reclaims the memory associated with it for future use.<br>
+
+**In Summary**<br>
+By becoming familiar with parsing, scoping, hoisting, memory allocation, execution, call stack management, the event loop, and garbage collection, you can better predict how your code will behave and avoid common pitfalls.
+
+# JavaScript Execution Lifecycle in Browser for React Applications
+When it comes to React applications in the browser, the JavaScript execution lifecycle interacts closely with React's component lifecycle. Here's a breakdown of the key stages:
+
+1. `Parsing and Scoping:`
+
+  - The browser receives React code (JSX gets compiled to JavaScript).
+  - The code is parsed, creating an AST, and variables/functions are scoped.
+
+2. `Memory Allocation:`
+
+- Memory is allocated for React components, variables, and functions.
+
+3. `Initial Render:`
+
+- React parses the JSX code and creates a virtual DOM (a lightweight representation of the UI).
+- React compares the virtual DOM with the actual DOM (if a component is already mounted) and identifies necessary changes.
+
+4. `Event Loop and User Interaction:`
+
+- The browser's event loop waits for user interactions or asynchronous tasks.
+- When a user interacts with the UI (clicks a button, types in a form), an event is triggered.
+
+5. `React Component Lifecycle:`
+The appropriate React component lifecycle methods are invoked based on the event or state change:
+- `constructor (optional):` Runs once before rendering (typically for initialization).
+- `getDerivedStateFromProps (optional): Updates component state based on changes in props (rarely used).
+- `componentDidMount (optional):` Runs after the component is first rendered in the DOM. Often used for data fetching, subscriptions, etc.
+- `shouldComponentUpdate (optional):` Controls whether a component should re-render based on state or props changes (used for performance optimization).
+- `getSnapshotBeforeUpdate (optional):` Captures a snapshot of the DOM before updates (used for DOM manipulation after updates).
+- `render (required):` Returns the JSX code representing the component's UI.
+- `componentDidUpdate (optional):` Runs after the component updates in the DOM (can be used to update side effects based on state changes).
+- `componentWillUnmount (optional):` Runs before the component is removed from the DOM (used for cleanup tasks like clearing subscriptions).
+
+6. `Virtual DOM Diffing and Updates:`
+-React efficiently updates the actual DOM based on the differences identified between the virtual DOM and the previous state. This minimizes unnecessary DOM manipulation, improving performance.
+- Diffing algorithm (`optimizing UI updates`) differentiates the real dom and virtual dom ,  if any changes react updates the real dom with updated changes only. 
+- Reconciliation ensures the real DOM reflects the current state of the application based on the virtual DOM. Reconcilation syncs the real dom
+   - **Diffing Algorithm:**
+      - `Virtual DOM Comparison:` After a state or prop change, React creates a new virtual DOM representing the updated UI.
+      - `Efficient Diffing:` React's diffing algorithm intelligently compares the new virtual DOM with the previous virtual DOM. It identifies the minimal set of changes needed to update the actual DOM.
+      - `Minimized DOM Updates:` Based on the diffing results, React only updates the specific parts of the real DOM that have actually changed. This avoids unnecessary re-rendering of the entire DOM, leading to performance improvements.
+   - **Reconciliation:**
+
+      - `Synchronization:` Reconciliation is the process where React takes the minimal set of changes identified by the diffing algorithm and synchronizes the real DOM with the updated virtual DOM.
+      - `Correctness:` The reconciliation process in React is generally considered correct as long as the virtual DOM accurately reflects the component's state and props. The diffing algorithm is designed to be efficient and reliable in identifying necessary DOM updates.
+7. `Garbage Collection:`
+
+JavaScript's garbage collector reclaims unused memory associated with components that are no longer needed.<br>
+**Key Points:**<br>
+
+- React's component lifecycle methods are tightly coupled with the browser's event loop and JavaScript execution.
+- The virtual DOM diffing mechanism helps React optimize updates to the actual DOM, enhancing performance.
+- Understanding these stages helps you write efficient and well-structured React applications.
+
+### render: [Blueprint of UI]
+
+- `Function within a Component:` The render function is a required method within a React component.
+-  `Returns JSX:` It returns JSX code that defines the component's UI structure. The JSX is transpiled into JavaScript that describes the UI elements.
+- `Instructions, not Actions:` It acts as a declarative instruction, specifying what the UI should look like based on the component's state and props.
+- `No Direct DOM Manipulation:` It doesn't directly manipulate the DOM itself.
+### renderer: [constructor of actual DOM]
+
+- `Responsible for DOM Creation:` The renderer is responsible for taking the output from the render function (the JSX description) and translating it into actual DOM elements in the browser.
+- `Can Be Different Implementations:` There are different renderer implementations available in React.
+      - `React DOM (Default):` The default renderer for web applications, responsible for creating and manipulating DOM elements in the browser.
+      - `React Native:` A renderer for building mobile apps, translating the UI description into native UI elements for iOS and Android.
+- `Handles DOM Updates:` The renderer also handles updating the DOM when the component's state or props change. It leverages React's virtual DOM diffing algorithm to identify the minimal set of DOM changes needed for efficiency.
+- `In Summary:`
+
+  - The render function specifies the UI using declarative JSX.
+  -  The renderer acts on those instructions, translating them into actual DOM elements or native UI elements (depending on the renderer) and updating the DOM efficiently.
+
+- **Analogy:**
+Think of render as the architect's blueprint for a building. It defines the structure and layout. The renderer is like the construction crew that takes the blueprint and builds the actual building (the DOM or native UI).
 
 # Mitigated problems with React JS
 - DOM manipulation directly with browser document is expensive and slow - `react intorduced the virtual DOM with React reconciliation. React updates only part of the page which needs to be changed.`
@@ -26,10 +134,12 @@ props can't be changed.
 # React States
 which makes dynamic rendering of a component , function component uses hooks to achieve it where calss component achieve the same by getting properties from parent component of React.
 <br>
+
 Component state update may be Asynchronous, so best practice is to use function rather direct updating the state.
 `Statefull components`<br>
 - mostly called class components
 - it has own state, life cycle management [constuctor, render(), componetDidMount(), componentDidUpdate(), componentWillUnmount(), componentDidCatch()]
+- `render`  which instructs the browser to show component UI
 -  Best for Complex UI for tracking changes.
 `Stateless Components` <br>
 - mostly referred as functional componets
@@ -251,7 +361,7 @@ Navigate and useNavigate:
   - npm install notistack
 
 ### Usage
-import { SnackbarProvider, enqueueSnackbar } from 'notistack'<br>
+import { SnackbarProvider, enqueueSnackb  ar } from 'notistack'<br>
 - SnackbarProvider is component ans implement required logic to it.
 - or can be wrpped to the react application , then can be use `useSnackbar` hook at required componenet to display snack bar<br>
 const MyButton = () => {
@@ -361,3 +471,192 @@ below hooks are used to bind:
  States are updated sychronosly to the store, So Redux won't encourage the asynchronous operations inside it components.
  - redux-thunk
  - applyMiddleware()
+## Redux with `reduxjs/toolkit` library
+**Redux**
+- `More Manual:` Requires you to write and configure reducers, actions, and middleware yourself.
+- `Boilerplate Code:` Can involve more boilerplate code, especially for common tasks.
+- `Immutability Management:` You need to be careful to avoid accidentally mutating the state.
+- thirdparty libraries like redux-thunk, redux-devtools, logger for async/ debugging 
+**Redux Toolkit**
+- `Simplified Setup:` Provides tools like configureStore and createSlice to streamline store setup and reducer creation.
+- `Reduced Boilerplate:` Less code needed for common Redux patterns.
+- `Built-in Features:` Includes Redux Thunk (for async logic) and Immer (for safer state updates) by default.
+- `Automatic DevTools:` Configures the Redux DevTools extension automatically for easier debugging.
+
+**createSlice**
+The createSlice function in Redux Toolkit is a powerful tool for managing a specific part of your Redux state (a "slice"). Here's how it works and what it returns:
+
+*What it Takes:* <br>
+`Slice Name:` A string to identify the slice within your Redux store.
+`Initial State:` The initial value of the state for this slice.
+`Reducers:` An object containing functions that define how to update the state based on dispatched actions.<br>
+*What it Does:* <br>
+`Action Creators:`
+- It automatically generates action creators for each reducer function.
+- These action creators allow you to dispatch actions that trigger the corresponding state updates.
+`Action Types:`
+- It generates unique action type strings based on the slice name and reducer function names.
+- These types are used by Redux to identify which reducer to call for each action.
+`Reducer:`
+- It creates a single reducer function that combines all the individual reducers in the object you provided.
+- This reducer handles all actions related to this slice of the state.<br>
+*What it Returns:* <br
+`An Object:` It returns an object containing:
+Action Creators: Functions you can use to dispatch actions.
+Reducer: The combined reducer function for the slice.
+
+
+**How createAction Works:**
+
+`Purpose:` createAction is a utility function in Redux Toolkit that simplifies the creation of action creators.<br>
+`Input:`
+- actionType: A string representing the type of the action. This type is used by reducers to determine how to update the state based on the action.
+- prepareAction?: An optional callback function that can be used to customize the payload of the action.<br>
+`Output:`<br>
+An action creator function that, when called, returns an action object. This action object has *the following properties:*<br>
+- type: The action type string provided as input.
+- payload: The payload value, either:<br>
+If prepareAction is not provided, the payload is undefined.<br>
+If prepareAction is provided, the payload is the value returned by the callback.<br>
+- meta (optional): Additional information about the action.
+- error (optional): An error object if the action represents a failure.
+*Example:*
+```
+import { createAction } from '@reduxjs/toolkit';
+
+const incrementCounter = createAction('counter/increment');
+const decrementCounter = createAction('counter/decrement', payload => ({ amount: payload || 1 }));
+
+// Usage:
+import { useDispatch } from "react-redux";
+import { incrementCounter, decrementCounter } from "./counterActions";
+
+const MyComponent = () => {
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <button onClick={() => dispatch(incrementCounter())}>Increment</button> // { type: 'counter/increment', payload: undefined }
+      <button onClick={() => dispatch(decrementCounter(2))}>Decrement</button>
+```
+```
+createSlice
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  value: 0,
+};
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {
+    // Handle actions defined earlier
+    handleIncrement: (state, action) => {
+      state.value += 1;
+    },
+    handleDecrement: (state, action) => {
+      state.value -= 1;
+    },
+  },
+});
+
+export default counterSlice.reducer;
+
+```
+**createAsyncThunk**
+`createAsyncThunk` is a powerful tool in Redux Toolkit that simplifies handling asynchronous operations like fetching data from an API. Here's how it works:<br>
+
+*What it Takes:*
+
+`Action Type String:` A string representing the overall action type. This forms the base for generating lifecycle action types.
+`Callback Function:` A function that performs the asynchronous operation. This function should return a promise that resolves with the result or rejects with an error.
+
+*What it Returns:*
+
+`Thunk Action Creator:` A function that can be dispatched from your components. When dispatched, this function triggers the asynchronous operation and dispatches lifecycle actions based on the promise's outcome.
+
+*How it Works:*
+
+1. `Lifecycle Action Types:` createAsyncThunk generates three additional action types based on the provided action type string:
+- `Pending:` Dispatched when the asynchronous operation starts.
+- `Fulfilled:` Dispatched when the promise resolves successfully, with the result as the payload.
+- `Rejected:` Dispatched when the promise rejects, with the error as the payload.
+2. `Thunk Function Execution:` When the thunk action creator is dispatched:
+The provided callback function is executed.
+- *Based on the promise's outcome:* <br>
+  - If successful, the fulfilled action type is dispatched with the result.
+  - If an error occurs, the rejected action type is dispatched with the error.
+3. `Reducer Handling:` Your reducers can handle these lifecycle actions to update the state accordingly. You can use the extraReducers section in createSlice or the builder callback in createReducer to handle these actions.
+
+```
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+const initialState = {
+  posts: [],
+  loading: false,
+  error: null,
+};
+
+export const fetchPosts = createAsyncThunk(
+  'posts/fetchPosts',
+  async () => {
+    const response = await fetch('https://api.example.com/posts');
+    return response.json();
+  }
+);
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+      .addCase(fetchPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  },
+});
+
+export default postsSlice.reducer;
+```
+```
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPosts } from './postsSlice';
+
+const PostsList = () => {
+  const dispatch = useDispatch();
+  const { posts, loading, error } = useSelector((state) => state.posts);
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
+
+  if (loading) return <p>Loading posts...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <ul>
+      {posts.map((post) => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  );
+};
+
+export default PostsList;
+
+```
+*Key Points*
+- createAsyncThunk simplifies asynchronous logic by automatically handling promise lifecycle actions.
+- It improves code organization and maintainability by separating async logic from reducers.
+- You can access the loading and error states in your components based on the dispatched lifecycle actions.
