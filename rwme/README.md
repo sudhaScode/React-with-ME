@@ -107,6 +107,10 @@ JavaScript's garbage collector reclaims unused memory associated with components
 - **Analogy:**
 Think of render as the architect's blueprint for a building. It defines the structure and layout. The renderer is like the construction crew that takes the blueprint and builds the actual building (the DOM or native UI).
 
+# CSR v/s SSR
+1. QtripStatic - HTMl CSS -> SSR -> resources are preprocessed and send as response from server
+2. Qcart - React JS -> CSR -> everything is processed on browser -> DOM manipulation after element renders only
+
 # Mitigated problems with React JS
 - DOM manipulation directly with browser document is expensive and slow - `react intorduced the virtual DOM with React reconciliation. React updates only part of the page which needs to be changed.`
 - well known web technology i.e. HTML won't offer reusability of it's container/elements - `react introduced reusable componenets, can be export and import for later uses with ES6 modularity feature of Java Script`
@@ -174,6 +178,18 @@ Handling events  with React elements is very similar to handling events on DOM e
 3. Define a function and invoke it as prop by callback function
    - onClick={() => this.handleClick()}
 
+# Creating react with CRA
+CRA is a template to get start with React
+- NPX - is a package executer
+- NPM - is anything but offently reffered as node package manager
+
+## to remove unsed variables or import use lint
+```
+ "scripts": {
+    "lint": "eslint . --ext .js,.jsx --fix"
+  }
+```
+# Vie -Rect APP creator with vite BUNDLER
 
 # Introduction Axios
 Axio is a very powerfull JS library to perfrom HTTP requests.
@@ -660,3 +676,132 @@ export default PostsList;
 - createAsyncThunk simplifies asynchronous logic by automatically handling promise lifecycle actions.
 - It improves code organization and maintainability by separating async logic from reducers.
 - You can access the loading and error states in your components based on the dispatched lifecycle actions.
+
+# API Intigration
+1. Aware with Design 
+- Mind map the required elements and css accroding to design
+2. Familar with the address related API endpoints - request and response data
+- Always understand the request and response structure of the API endpoints to be used. You can use a tool like cURL command or use JS (eg: axios) and log the values.
+3. Intigrate the response data to design
+-  When dealing with list of elements/array better to use Array High order functions 
+
+<br>
+
+**useRef()**
+- used to get the refference of an JSX element in component, to work with actual DOM
+- to avoid unneccessary rerendering when a dom needs to update.
+- use useRef  carefully to be not malfunction/ unsync state of component. better to use in uncontrolled components
+- useRef returns an object with current object which contains current atributes, events, and valu of referred element.
+
+
+# Performance and Optimization:
+
+**The Problem**
+<br>
+When working with memoized components, you might encounter issues where functions passed as props change their reference on every render, causing unnecessary re-renders. This happens because React creates new function instances on each render, even if the function's logic remains the same.
+
+<br>
+
+**The Issue with Objects:**
+
+When you pass objects as props to a memoized component, React performs a shallow comparison. This means it only checks if the object reference has changed, not the contents of the object.
+If the object itself hasn't changed (same reference), but its properties have, React won't trigger a re-render, even though the component's output might need to change.
+<br>
+
+**Resolving the Issue**<br>
+Here are some strategies to address this:
+<br>
+
+- `Shallow Comparison with Primitive Values:` <br>
+If you can ensure that the object passed as a prop contains only primitive values (strings, numbers, booleans), shallow comparison will work correctly.
+- `Deep Comparison:`<br>
+For complex objects, you can use libraries like `lodash or immutable.js` to perform deep comparisons. These libraries provide functions to check if two objects have the same structure and values.
+However, deep comparison can be computationally expensive for large objects.
+- `Immutability:`<br>
+Create new objects instead of mutating existing ones. This ensures that the object reference changes, triggering a re-render.
+Use spread operators or object spread syntax to create new objects with updated properties.
+- `Custom Comparison Logic:`
+
+If you have specific criteria for determining whether a component should re-render, you can implement a custom comparison function using shouldComponentUpdate (for class components) or useMemo with a custom comparison function (for functional components).
+
+<br>
+
+`useCallback is crucial for memoizing functions passed as props, useMemo is essential for memoizing values derived from expensive calculations within a component.`
+
+2. **React Memo**
+- React.memo
+Draw back/ the problem with react processing for rerendering is when parent component re render due to props/ state change , the cild component gets rerenders even though props/state related  to child components haven't change. Rerendering a components unneccessarly is degrades the application performance. to avoid/ stop being rerendring when props of a composite/child components not changed React provides `React Memo` to compare props(shallow comparision) each time when parent re renders.  
+<br>
+
+`Rember the ability of pure function same output for same input` - React functinoal components are follows the same so rather rerendering for same input again and again on brower we can keep same untill input changes , it can be acheived by the memoizing the component with inputs.
+- React memo compares the new props with old props with strict shallow comparision, show while passing the function as props be catiuos it cause rerender as fucntions are recreated agaian and again  and refference is changes and functions are objects.
+<br>
+
+React's `React.memo` uses shallow comparison to determine if a component should re-render. This means it compares the references of props passed to the component. If the references are the same, the component is considered unchanged and not re-rendered.
+
+<br>
+
+3. **useMemo** - to mitigate reference changes for function and objects use useMemo hook and to avoid exceptional computation for same input.
+- can be memoize the fucntion by wrappin with useMemo(function, [..dependecncy array]) and return cached result 
+
+- `Memorizin the function result`
+- calling memoized function works optimally increases performance
+
+```
+//Manual implmentation
+const sum =(a,b)=>{
+    console.log("triggered sum operation", a,b)
+   return a+b
+}
+
+const memoize = (fn)=>{
+    const cache = {}
+    return function (...args){
+        if(cache[[...args]]){
+            return cache[[args]]
+
+        }
+        const result = fn(...args)
+        cache[[...args]] = result
+       
+        return result
+
+    }
+}
+let func = memoize(sum)
+or 
+let result = useMemo(sum, [])
+console.log(func(2,3))
+console.log(func(2,3))
+```
+
+
+**The Problem: Frequent Re-renders**<br>
+When dealing with complex components or expensive calculations within a React component, frequent re-renders can impact performance. This often occurs when:
+
+- Props or state changes, triggering unnecessary re-renders.
+- Complex calculations are performed within the component, leading to performance bottlenecks. <br>
+**Solution: useMemo Hook**
+To address these issues, React provides the useMemo hook. It memoizes the result of a function, preventing unnecessary recalculations and improving performance.
+<br>
+**How useMemo works:**
+
+1. Takes a function and a dependency array as arguments.
+2. Caches the return value of the function.
+3. Re-calculates the value only when the dependencies in the array change.
+
+4. **useCallback**
+- take cares the function not only the input/output of function like useMemo <br>
+useCallback is a React hook designed to memoize functions. It returns a memoized version of the callback function, which will only change if the dependencies array changes.
+
+**When to Use useCallback**
+- `Functions passed as props:` If you're passing functions as props to child components, use useCallback to prevent unnecessary re-renders of those child components.
+- `Complex functions:` If a function is computationally expensive, memoizing it can improve performance.
+- `Callbacks within useEffect:` If you're using a callback within useEffect and want to control when it runs, useCallback can be helpful.
+- `Note`- Context: If you're using useContext, the value returned by useContext is already memoized, so you don't need to use useCallback for functions that depend on it.
+
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image.png)
+
+`Combining useCallback and React.memo is a powerful strategy for optimizing component performance in React applications.`
